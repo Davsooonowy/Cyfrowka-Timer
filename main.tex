@@ -125,6 +125,17 @@
 
     \doubleimage{images/ustaw_liczbe}{images/ustaw_liczbe_box}{Licznika z możliwością ustawiania liczby początkowej}
     {Schemat układu}{Podukład}{scale=0.5}{scale=0.5}
+
+    Definicja wejść:
+    \begin{itemize}
+        \item CLK --- sygnał zegarowy
+        \item L --- sygnał ``load''. Wartość 1 wskazuje, że układ jest w trybie ustawiania liczby, 0 --- w trybie odliczania
+    \end{itemize}
+    
+    Wejścia SA, SB, SC i SD to wartości, które chcemy ustawić bitom odpowiednio A, B, C, D.
+    Jeżeli układ jest w trybie ustawiania liczby (L = 1) SA, SB, SC i SD są przekazywane wejściom SET
+    przerzutnikom odpowiadającym ustawianemu bitowi, a ich zaprzeczenia --- wejściom RESET. W przypadku trybu
+    odliczania --- SET i RESET są ustawione na 0, co umożliwia odliczanie.
     
     \section{Transkoder liczby binarnej na dziesiętną}
     Przyjmijmy oznaczenie \(\mathbf{Bij}\) --- \(j\)-ty bit \(i\)-tego wyświetlacza siedmiosegmentowego.
