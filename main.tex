@@ -90,6 +90,41 @@
     wyświetlaczy które pokazują odpowiednią liczbę. Przejścia pomiędzy liczbami są przedstawione w postaci stanów logicznych 
     które są opisane w tabeli prawdy. Przy pomocy tabel Karnaugh wyprowadzone zostały funkcje logiczne które reprezentują
     prezentowany układ.
+
+    \section{Licznik}
+    Timer składa się z określonej liczby przerzutników (4) typu D. Pierwszy z nich jest podłączony do źródła prądu zmiennego. 
+    Początkowy stan każdego z przerzutników to 0.
+
+    \subsection{Przerzutnik typu D}
+    Przerzutnik typu D jest jednym z podstawowych elementów w elektronice cyfrowej. Jest to dwustanowy układ logiczny, 
+    który przechowuje jedną bitową wartość. Ma dwa wejścia: dane (D) i sygnał zegarowy (CLK), oraz dwa wyjścia: stan(Q)
+    i stan sprzężony (Q'). 
+    \begin{figure}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \caption{Schemat przerzutnika}
+        %\includegraphics{images/D_FF.png}
+    \end{figure} 
+
+    \subsection{Dzielenie częstotliwości przez 2}
+    Przez sprzężenie zwrotne wyjścia z Q do wejścia D, impulsy wyjściowe na Q mają częstotliwość połowy częstotliwości
+    zegara wejściowego.
+    
+    \image{images/czestotliwosc_na_2}{Zastosowanie przerzutnika typu D do dwukrotnego zmniejszenia częstotliwości sygnału zegarowego}{scale=0.5}
+
+    \subsection{Licznik złożony z czterech przerzutników}
+    Użyty przez nas licznik jest asynchroniczny. Każdy z przerzutników otrzymuje sygnał zegarowy o innej częstotliwości
+    (pierwszy --- częstotliwość źródła, każdy kolejny --- połowę częstotliwości poprzedniego).
+    \image{images/licznik_analizator}{Działanie licznika złożonego z czterech przerzutników typu D}{scale=0.5}
+    Z analizatora stanów logicznych widać, że sygnał wyjściowy każdego przerzutnika jest sygnałem zegarowym o
+    dwukrotnie mniejszej częstotliwości od wejściowego sygnału.
+
+    \section{Licznik z możliwością ustawienia czasu początkowego}
+    Ustawianie czasu, od którego układ ma rozpocząć odliczanie odbywa się za pomocą czterech przełączników ---
+    każdy odpowiedzialny za wartość konkretnego bitu w reprezentacji binarnej liczby ze zbioru \(\{0,1,2,\dots,15\}\).
+
+    \doubleimage{images/ustaw_liczbe}{images/ustaw_liczbe_box}{Licznika z możliwością ustawiania liczby początkowej}
+    {Schemat układu}{Podukład}{scale=0.5}{scale=0.5}
     
     \section{Transkoder liczby binarnej na dziesiętną}
     Przyjmijmy oznaczenie \(\mathbf{Bij}\) --- \(j\)-ty bit \(i\)-tego wyświetlacza siedmiosegmentowego.
@@ -130,42 +165,19 @@
     \doubleimage{images/transkoder}{images/transkoder_box}{Transkoder liczby binarnej na dziesiętną}
     {Schemat transkodera}{Podukład podłączony do wyświetlaczy}{scale=0.5}{scale=0.6}
 
-    \section{Licznik}
-    Timer składa się z określonej liczby przerzutników (4) typu D. Pierwszy z nich jest podłączony do źródła prądu zmiennego. 
-    Początkowy stan każdego z przerzutników to 0.
-
-    \subsection{Przerzutnik typu D}
-    Przerzutnik typu D jest jednym z podstawowych elementów w elektronice cyfrowej. Jest to dwustanowy układ logiczny, 
-    który przechowuje jedną bitową wartość. Ma dwa wejścia: dane (D) i sygnał zegarowy (CLK), oraz dwa wyjścia: stan(Q)
-    i stan sprzężony (Q'). 
-    \begin{figure}[H]
-        \centering
-        \captionsetup{font=small, skip=2pt}
-        \caption{Schemat przerzutnika}
-        %\includegraphics{images/D_FF.png}
-    \end{figure} 
-
-    \subsection{Dzielenie częstotliwości przez 2}
-    Przez sprzężenie zwrotne wyjścia z Q do wejścia D, impulsy wyjściowe na Q mają częstotliwość połowy częstotliwości
-    zegara wejściowego.
-    
-    \image{images/czestotliwosc_na_2}{Zastosowanie przerzutnika typu D do dwukrotnego zmniejszenia częstotliwości sygnału zegarowego}{scale=0.5}
-
-    \subsection{Licznik złożony z czterech przerzutników}
-    Użyty przez nas licznik jest asynchroniczny. Każdy z przerzutników otrzymuje sygnał zegarowy o innej częstotliwości
-    (pierwszy --- częstotliwość źródła, każdy kolejny --- połowę częstotliwości poprzedniego).
-    \image{images/licznik_analizator}{Działanie licznika złożonego z czterech przerzutników typu D}{scale=0.5}
-    Z analizatora stanów logicznych widać, że sygnał wyjściowy każdego przerzutnika jest sygnałem zegarowym o
-    dwukrotnie mniejszej częstotliwości od wejściowego sygnału.
-
     \section{Alarm}
     Po upłynięciu czasu który został ustawiony na przełącznikach uruchamia się alarm. Jest on reprezentowany przez 
     czerwoną diodę LED.
     \\ Implementacja alarmu w multisimie:
     \\zdjecie
 
-    
-    
+    \section{Pełny układ}
+    \begin{figure}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \includegraphics[scale=0.7]{images/pelny_timer}
+        \caption{Schemat pełnego układu TIMER w Multisim}
+    \end{figure}
     
     
 \end{document}
