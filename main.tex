@@ -377,10 +377,15 @@
     wewnętrznego sygnału zegarowego analizatora na dole) mają takie same wykresy. 
 
     \section{Wnioski}
-    
+    Zaprojektowany układ złożony z przerzutników typu D oraz wybranych bramek logicznych spełnia swoje zadanie
+    odliczania od ustalonej wartości i informacji o zakończeniu działania. Możliwość ustawiania za pomocą
+    przełączników liczby początkowej zwiększa jego zakres zastosowań.
     \subsection*{Co można było zrobić lepiej?}
     \begin{itemize}
-        \item Użyć licznika synchronicznego
+        \item Użyć licznika synchronicznego,
+        \item Dodać przełącznik umożliwiający zatrzymanie i wznowienie odliczania,
+        \item Dodać 16 przełączników, gdzie każdy ustawia konkretną liczbę. Byłoby to bardziej efektywne niż
+            ustawianie jej za pomocą reprezentacji dwójkowej
     \end{itemize}
 
     \section{Zastosowania}
@@ -392,6 +397,8 @@
             \includegraphics[scale=0.7]{images/lodowka}
             \caption{Zastosowanie układu do informacji o długim otwarciu lodówki}
         \end{figure}
+        Lodówka zawiera czujnik otwarcia drzwi. Działa ona jak przełącznik TIME\_SET u nas, po otwarciu
+        zaczyna się odliczanie.
         \item System blokujący drzwi wejściowe do budynku po otwarciu ich przez mieszkańca za pomocą domofonu
         \begin{figure}[H]
             \centering
@@ -399,6 +406,7 @@
             \includegraphics[scale=0.3]{images/drzwi}
             \caption{System blokujący drzwi}
         \end{figure}
+        W momencie otwarcia drzwi do bloku przez mieszkańca, są otwarte przez ustalony za pomocą przełączników czas.
         \item Odliczanie czasu do eksplozji bomby \begin{figure}[H]
             \centering
             \captionsetup{font=small, skip=2pt}
