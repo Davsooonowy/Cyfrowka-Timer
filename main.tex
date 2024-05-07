@@ -95,27 +95,140 @@
 
     \subsection{Przerzutnik typu D}
     Przerzutnik typu D jest jednym z podstawowych elementów w elektronice cyfrowej. Jest to dwustanowy układ logiczny, 
-    który przechowuje jedną bitową wartość. Ma dwa wejścia: dane (D) i sygnał zegarowy (CLK), oraz dwa wyjścia: stan(Q)
-    i stan sprzężony (Q'). 
+    który przechowuje jedną bitową wartość. Ma wejścia: dane (D), sygnał zegarowy (CLK), SET i RESET oraz dwa wyjścia: stan(Q)
+    i stan sprzężony (Q'). W ćwiczeniu narastający sygnał zegarowy jest aktywnym sygnałem zegarowym przerzutnika.
     \begin{figure}[H]
         \centering
         \captionsetup{font=small, skip=2pt}
-        \caption{Schemat przerzutnika}
-        %\includegraphics{images/D_FF.png}
-    \end{figure} 
+        \includegraphics{images/dff}
+        \caption{Przerzutnik typu D użyty w zadaniu}
+    \end{figure}
+    \begin{table}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \caption{Tabela prawdy dla przerzutnika typu D z wejściami SET i RESET}
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \hline
+            CLK & SET & RESET & D & Q & \(\mbox{Q}_+\) \\
+            \hline
+            \(\uparrow\) & 0 & 0 & 0 & 0 & 0 \\
+            \(\uparrow\) & 0 & 0 & 1 & 0 & 1 \\
+            \(\uparrow\) & 0 & 0 & 0 & 1 & 0 \\
+            \(\uparrow\) & 0 & 0 & 1 & 1 & 1 \\
+            x & 1 & 0 & x & Q & 1 \\
+            x & 0 & 1 & x & Q & 0 \\
+            x & 1 & 1 & x & Q & x \\
+            \hline
+        \end{tabular}
+    \end{table}
 
     \subsection{Dzielenie częstotliwości przez 2}
-    Przez sprzężenie zwrotne wyjścia z Q do wejścia D, impulsy wyjściowe na Q mają częstotliwość połowy częstotliwości
-    zegara wejściowego.
+    Aby uzyskać sygnał wyjściowy Q w postaci sygnału zegarowego o częstotliwości równej połowie częstotliwości
+    wejściowego sygnału zegarowego należy połączyć wyjście Q' z wejściem D. Wtedy przy każdym aktywnym sygnale zegarowym
+    wartość Q zostanie zmieniona na przeciwną.
+
+    \begin{table}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \caption{Tabela prawdy}
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            CLK & Q & \(\mbox{Q}_+\) & kierunek sygnału \\
+            \hline
+            \(\uparrow\) & 0 & 1 & \(\uparrow\) \\
+            \(\uparrow\) & 1 & 0 & \(\downarrow\)\\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    Warto zauważyć, że aby uzyskać narastający sygnał zegarowy na wyjściu konieczne będą dwa sygnały narastające na wejściu.
+    Dzieje się tak, ponieważ sygnał narastający pojawia się przy zmianie z 0 na 1. Zakładając, że stan Q to 1
+    konieczny jest jeden sygnał narastający na wejściu, aby zmienić Q na 0 i drugi, żeby zmienić z 0 na 1.
+    Na poniższym rysunku widać, że faktycznie sygnały narastające wyjścia Q następują dwa razy rzadziej od tych
+    na wejściu CLK, zatem częstotliwość wyjściowego sygnału jest dwukrotnie mniejsza od częstotliwości sygnału wejściowego.
     
     \image{images/czestotliwosc_na_2}{Zastosowanie przerzutnika typu D do dwukrotnego zmniejszenia częstotliwości sygnału zegarowego}{scale=0.5}
 
     \subsection{Licznik złożony z czterech przerzutników}
     Użyty przez nas licznik jest asynchroniczny. Każdy z przerzutników otrzymuje sygnał zegarowy o innej częstotliwości
     (pierwszy --- częstotliwość źródła, każdy kolejny --- połowę częstotliwości poprzedniego).
+    Pierwszy przerzutnik jest podłączony do źródła sygnału zegarowego. Drugi na wejście CLK otrzymuje
+    wartość \(\mbox{Q}_1\) (wyjście pierwszego). Trzeci na CLK otrzymuje \(\mbox{Q}_2\), a czwarty \(\mbox{Q}_3\)Poniższa tabela opisuje zachowanie takiego licznika. Przyjmujemy oznaczenia:
+    \begin{itemize}
+        \item \(\mbox{Q}_{i+}\) --- wartość \(\mbox{Q}_i\) po otrzymaniu aktywnego sygnału zegarowego na wejściu CLK w przerzutniku \(i\),
+        \item \(\mbox{Q}_{id}\) --- kierunek przejścia stanu \(\mbox{Q}_i\) po otrzymaniu aktywnego sygnału zegarowego \begin{itemize}
+            \item \(0\rightarrow 1\) --- sygnał narastający, czyli \(\mbox{Q}_{id}=\;\uparrow\),
+            \item \(1\rightarrow 0\) --- sygnał opadający, czyli \(\mbox{Q}_{id}=\;\downarrow\)
+        \end{itemize}
+    \end{itemize}
+    \begin{table}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \caption{Tabela stanów wyjść i kierunków przejścia przerzutników, z których złożony jest licznik}
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+            \hline
+            CLK & \(Q_4\) & \(Q_3\) & \(Q_2\) & \(Q_1\) & \(Q_4d\) & \(Q_3d\) & \(Q_2d\) & \(Q_1d\) & \(Q_{4+}\) & \(Q_{3+}\) & \(Q_{2+}\) & \(Q_{1+}\)\\
+            \hline
+            \(\uparrow\) & 1 & 1 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 1 & 1 & 0\\
+            \(\uparrow\) & 1 & 1 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 1 & 1 & 0 & 1\\
+            \(\uparrow\) & 1 & 1 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 1 & 0 & 0\\
+            \(\uparrow\) & 1 & 1 & 0 & 0 & --- & \(\downarrow\) & \(\uparrow\) & \(\uparrow\) & 1 & 0 & 1 & 1\\
+            \(\uparrow\) & 1 & 0 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 0 & 1 & 0 \\
+            \(\uparrow\) & 1 & 0 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 1 & 0 & 0 & 1\\
+            \(\uparrow\) & 1 & 0 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 0 & 0 & 0\\
+            \(\uparrow\) & 1 & 0 & 0 & 0 & \(\downarrow\) & \(\uparrow\) & \(\uparrow\) & \(\uparrow\) & 0 & 1 & 1 & 1\\
+            \(\uparrow\) & 0 & 1 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 1 & 1 & 0\\
+            \(\uparrow\) & 0 & 1 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 0 & 1 & 0 & 1\\
+            \(\uparrow\) & 0 & 1 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 1 & 0 & 0\\
+            \(\uparrow\) & 0 & 1 & 0 & 0 & --- & \(\downarrow\) & \(\uparrow\) & \(\uparrow\) & 0 & 0 & 1 & 1\\
+            \(\uparrow\) & 0 & 0 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 0 & 1 & 0\\
+            \(\uparrow\) & 0 & 0 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 0 & 0 & 0 & 1\\
+            \(\uparrow\) & 0 & 0 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 0 & 0 & 0\\
+            \(\uparrow\) & 0 & 0 & 0 & 0 & \(\uparrow\) & \(\uparrow\) & \(\uparrow\) & \(\uparrow\) & 1 & 1 & 1 & 1\\
+            \hline
+        \end{tabular}
+    \end{table}
     \image{images/licznik_analizator}{Działanie licznika złożonego z czterech przerzutników typu D}{scale=0.5}
-    Z analizatora stanów logicznych widać, że sygnał wyjściowy każdego przerzutnika jest sygnałem zegarowym o
-    dwukrotnie mniejszej częstotliwości od wejściowego sygnału.
+    Z powyższej tabeli i wyników analizatora stanów logicznych wynika, że wartości \(Q_4,\;Q_3,\;Q_2,\;Q_1\)
+    reprezentują kolejne liczby od 15 do 0 włącznie w reprezentacji binarnej. Po uzyskaniu wartości 0 jednak układ zaczyna
+    ponownie odliczać od 15.
+
+    \subsection{Zakończenie odliczania po uzyskaniu wartości 0}
+    Aby zakończyć odliczanie po uzyskaniu wartości 0, na wejście pierwszego przerzutnika zamiast czystego
+    sygnału zegarowego C przekażemy sygnał CLK = C(\(Q_1\)' + \(Q_2\)' + \(Q_3\)' + \(Q_4\)'). Spowoduje to zakłócenie sygnału C,
+    ale zakładamy, że będzie wykorzystywany tylko w naszym układzie, więc nie ma ryzyka zaburzenia jego
+    synchronizacji w kilku układach.
+
+    \begin{table}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \caption{Tabela stanów wyjść i kierunków przejścia przerzutników, z których złożony jest licznik}
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+            \hline
+            CLK & \(Q_4\) & \(Q_3\) & \(Q_2\) & \(Q_1\) & \(Q_4d\) & \(Q_3d\) & \(Q_2d\) & \(Q_1d\) & \(Q_{4+}\) & \(Q_{3+}\) & \(Q_{2+}\) & \(Q_{1+}\)\\
+            \hline
+            \(\uparrow\) & 1 & 1 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 1 & 1 & 0\\
+            \(\uparrow\) & 1 & 1 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 1 & 1 & 0 & 1\\
+            \(\uparrow\) & 1 & 1 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 1 & 0 & 0\\
+            \(\uparrow\) & 1 & 1 & 0 & 0 & --- & \(\downarrow\) & \(\uparrow\) & \(\uparrow\) & 1 & 0 & 1 & 1\\
+            \(\uparrow\) & 1 & 0 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 0 & 1 & 0 \\
+            \(\uparrow\) & 1 & 0 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 1 & 0 & 0 & 1\\
+            \(\uparrow\) & 1 & 0 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 1 & 0 & 0 & 0\\
+            \(\uparrow\) & 1 & 0 & 0 & 0 & \(\downarrow\) & \(\uparrow\) & \(\uparrow\) & \(\uparrow\) & 0 & 1 & 1 & 1\\
+            \(\uparrow\) & 0 & 1 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 1 & 1 & 0\\
+            \(\uparrow\) & 0 & 1 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 0 & 1 & 0 & 1\\
+            \(\uparrow\) & 0 & 1 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 1 & 0 & 0\\
+            \(\uparrow\) & 0 & 1 & 0 & 0 & --- & \(\downarrow\) & \(\uparrow\) & \(\uparrow\) & 0 & 0 & 1 & 1\\
+            \(\uparrow\) & 0 & 0 & 1 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 0 & 1 & 0\\
+            \(\uparrow\) & 0 & 0 & 1 & 0 & --- & --- & \(\downarrow\) & \(\uparrow\) & 0 & 0 & 0 & 1\\
+            \(\uparrow\) & 0 & 0 & 0 & 1 & --- & --- & --- & \(\downarrow\) & 0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & --- & --- & --- & --- & 0 & 0 & 0 & 0\\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    Otrzymawszy \(Q_4=0\), \(Q_3=0\), \(Q_2=0\) i \(Q_1=0\) wartość CLK = C(\(Q_1\)' + \(Q_2\)' + \(Q_3\)' + \(Q_4\)')
+    będzie stale wynosić 0, zatem układ zatrzymał odliczanie.
 
     \section{Licznik z możliwością ustawienia czasu początkowego}
     Ustawianie czasu, od którego układ ma rozpocząć odliczanie odbywa się za pomocą czterech przełączników ---
@@ -134,6 +247,37 @@
     Jeżeli układ jest w trybie ustawiania liczby (L = 1) SA, SB, SC i SD są przekazywane wejściom SET
     przerzutnikom odpowiadającym ustawianemu bitowi, a ich zaprzeczenia --- wejściom RESET. W przypadku trybu
     odliczania --- SET i RESET są ustawione na 0, co umożliwia odliczanie.
+
+    \pagebreak
+    \begin{table}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \caption{Tabela prawdy ustawiania liczby, od której zaczynamy odliczanie}
+        \begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c|}
+            \hline
+            L & SA & SB & SC & SD & SET\_A & RESET\_A & SET\_B & RESET\_B & SET\_C & RESET\_C & SET\_D & RESET\_D \\
+            \hline
+            0 & x & x & x & x & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+            1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 1\\
+            1 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 1 & 0\\
+            1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 1\\
+            1 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 0\\
+            1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+            1 & 0 & 1 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0\\
+            1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 1\\
+            1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 1 & 0 & 1 & 0\\
+            1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\
+            1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 1 & 1 & 0\\
+            1 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1\\
+            1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 1 & 0\\
+            1 & 1 & 1 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 1\\
+            1 & 1 & 1 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 1 & 1 & 0\\
+            1 & 1 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 1\\
+            1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 0\\
+            \hline
+            
+        \end{tabular}
+    \end{table}
     
     \section{Transkoder liczby binarnej na dziesiętną}
     Przyjmijmy oznaczenie \(\mathbf{Bij}\) --- \(j\)-ty bit \(i\)-tego wyświetlacza siedmiosegmentowego.
@@ -191,6 +335,17 @@
         \includegraphics[scale=0.7]{images/pelny_timer}
         \caption{Schemat pełnego układu TIMER w Multisim}
     \end{figure}
+    Powyższy rysunek przedstawia pełny układ zaprojektowany w Multisim. Warto dodać, że na wejście
+    sygnału zegarowego pierwszego przerzutnika w liczniku jest przekazywana koniunkcja C (sygnału generowanego
+    przez źródło sygnału zegarowego), L' (oznacza to, że układ nie jest w trybie ustawiania liczby tylko odliczania) oraz
+    A' + B' + C' + D'. \\
+    
+    Wciśnięcie START będąc w trybie odliczania na czas trwania wciśnięcia ustawia L = 1 aby licznik ustawił wcześniej wybraną
+    przez nas liczbę. Wtedy (zakładając, że nie ustawiliśmy 0) wartość L wraca do 0 oraz A' + B' + C' + D' = 1, więc odliczanie się wznowi.
+
+    \image{images/ustawianie_liczby}{Tryb ustawiania liczby (stale widnieje 1001, czyli 9)}{scale=0.8}
+    \image{images/odliczanie}{Tryb odliczania (ustawiona liczba to 1101, czyli 13)}{scale=0.8}
+    \image{images/zero}{Doliczenie się do zera, miganie alarmu}{scale=0.8}
 
     \section{Testowanie}
 
