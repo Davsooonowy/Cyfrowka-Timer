@@ -81,19 +81,17 @@
             \item Tryb ustawiania liczby: ustawiamy wspomnianymi wyżej przełącznikami liczbę, i widzimy ją na wyświetlaczach. Funkcja odliczania jest zablokowana.
             W poprzednim trybie można również ustawiać liczbę, lecz układ zacząłby od razu odliczanie.
         \end{itemize}
-        \item Przycisku START uruchamiającego układ (korzystamy głównie licznik doliczy się do zera, bo przełącznik TIME\_SET również może rozpocząć odliczanie).
+        \item Przycisku START uruchamiającego układ (korzystamy głównie gdy licznik doliczy się do zera, bo przełącznik TIME\_SET również może rozpocząć odliczanie).
         \item Licznika zbudowanego z przerzutników typu D
         \item Diody LED
     \end{itemize}
     Układ zasilany jest źródłem prądu zmiennego. Przełącznik TIME\_SET umożliwia uruchomienie programu, natomiast przełącznik
     start powoduje zrestartowanie odliczania. Odbywa się ono za pomocą przerzutników typu D. Podłączone są one do siedmiosegmentowych
-    wyświetlaczy które pokazują odpowiednią liczbę. Przejścia pomiędzy liczbami są przedstawione w postaci stanów logicznych 
-    które są opisane w tabeli prawdy. Przy pomocy tabel Karnaugh wyprowadzone zostały funkcje logiczne które reprezentują
-    prezentowany układ.
+    wyświetlaczy które pokazują odpowiednią liczbę. Przy pomocy tabel Karnaugh wyprowadzone zostały funkcje logiczne transkodera liczby binarnej na dziesiętną.
 
     \section{Licznik}
     Timer składa się z określonej liczby przerzutników (4) typu D. Pierwszy z nich jest podłączony do źródła prądu zmiennego. 
-    Początkowy stan każdego z przerzutników to 0.
+
 
     \subsection{Przerzutnik typu D}
     Przerzutnik typu D jest jednym z podstawowych elementów w elektronice cyfrowej. Jest to dwustanowy układ logiczny, 
@@ -140,9 +138,9 @@
     \section{Transkoder liczby binarnej na dziesiętną}
     Przyjmijmy oznaczenie \(\mathbf{Bij}\) --- \(j\)-ty bit \(i\)-tego wyświetlacza siedmiosegmentowego.
     \(i\in\{1, 2\}\), \(j\in\{1, 2, 3, 4\}\). Mamy 2 wyświetlacze, a każdy z nich ma wejście na cztery bity (jest to wyświetlacz licby od 0 do F
-    w systemie szestnastkowym, stąd 4 wejścia). Pierwszy wyświetlacz pełni rolę cyfry dziesiątek, zatem jedyny bit,
+    w systemie szestnastkowym, stąd 4 wejścia). Wyświetlacz po lewej pełni rolę cyfry dziesiątek (jest to wyświetlacz 2, czyli \(i=2\)), zatem jedyny bit,
     który może się zmieniać to najmłodszy (B21), bo dla liczb od 0 do 15 włącznie cyfra dziesiątek przyjmuje wartość 0 lub 1.
-    Wejścia pozostałych bitów są uziemione. \\
+    Wejścia pozostałych bitów wyświetlacza 2 są uziemione. \\
     
     \subsection{Tabela prawdy}
 
@@ -179,8 +177,12 @@
     \section{Alarm}
     Po upłynięciu czasu który został ustawiony na przełącznikach uruchamia się alarm. Jest on reprezentowany przez 
     czerwoną diodę LED.
-    \\ Implementacja alarmu w multisimie:
-    \\zdjecie
+    \begin{figure}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \includegraphics[scale=0.4]{images/alarm}
+        \caption{Schemat alarmu}
+    \end{figure}
 
     \section{Pełny układ}
     \begin{figure}[H]
@@ -189,6 +191,66 @@
         \includegraphics[scale=0.7]{images/pelny_timer}
         \caption{Schemat pełnego układu TIMER w Multisim}
     \end{figure}
+
+    \section{Testowanie}
+
+    \subsection{Testowanie transkodera liczb szesnastkowych na dziesiętne}
+    Poniżej został przedstawiony generator liczb od 0 do 15 włącznie zapisane w systemie binarnym,
+    które mają zostać przetranskodowane na liczby w systemie dziesiętnym.
+    \begin{figure}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \includegraphics[scale=0.7]{images/generator1}
+        \caption{Generator liczb od 0 do 15 włącznie w systemie binarnym}
+    \end{figure}
+    
+    W poniższym generatorze są ustawione oczekiwane wyniki transkodowania liczb.
+    \begin{figure}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \includegraphics[scale=0.7]{images/generator2}
+        \caption{Generator poprawnych kodów liczb w systemie dziesiętnym}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \captionsetup{font=small, skip=2pt}
+        \includegraphics[scale=0.5]{images/analizator_test}
+        \caption{Analizator stanów logicznych w układzie testującym}
+    \end{figure}
+    Z powyższego analizatora widać, że wszystkie sygnały o jednakowych kolorach (za wyjątkiem rzecz jasna
+    wewnętrznego sygnału zegarowego analizatora na dole) mają takie same wykresy. 
+
+    \section{Wnioski}
+    
+    \subsection*{Co można było zrobić lepiej?}
+    \begin{itemize}
+        \item Użyć licznika synchronicznego
+    \end{itemize}
+
+    \section{Zastosowania}
+
+    \begin{itemize}
+        \item System informujący o długim czasie otwarcia lodówki \begin{figure}[H]
+            \centering
+            \captionsetup{font=small, skip=2pt}
+            \includegraphics[scale=0.7]{images/lodowka}
+            \caption{Zastosowanie układu do informacji o długim otwarciu lodówki}
+        \end{figure}
+        \item System blokujący drzwi wejściowe do budynku po otwarciu ich przez mieszkańca za pomocą domofonu
+        \begin{figure}[H]
+            \centering
+            \captionsetup{font=small, skip=2pt}
+            \includegraphics[scale=0.3]{images/drzwi}
+            \caption{System blokujący drzwi}
+        \end{figure}
+        \item Odliczanie czasu do eksplozji bomby \begin{figure}[H]
+            \centering
+            \captionsetup{font=small, skip=2pt}
+            \includegraphics{images/bomba}
+            \caption{Odliczanie do eksplozji bomby}
+        \end{figure}
+    \end{itemize}
     
     
 \end{document}
